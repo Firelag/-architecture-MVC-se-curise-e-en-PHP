@@ -17,7 +17,8 @@ class Router {
             //Le controleur est inclu selon l'action de l'utilisateur
 
             if(isset($_GET['url'])){
-                $url =  explode('/', filter_var($_GET['url'],FILTER_SANITIZE_URL));
+                $url =  explode('/', filter_var($_GET['url'],
+                FILTER_SANITIZE_URL));
 
                 $controller = ucfirst(strtolower($url[0]));
                 $controllerClass = "Controller".$controller;
@@ -25,23 +26,24 @@ class Router {
 
                 if(file_exists($controllerFile))
                 {
-                    require_once ($controllerFile);
-                    $this->_ctrl -> new $controllerClass($url);
+                    require_once($controllerFile);
+                    $this->_ctrl = new $controllerClass($url);
                 }
                 else
                     throw new Exception('Page introuvable');
-                    $this->_ctrl -> new ControllerAcceuil($url);
+                    
             }
             else
             {
-                require_once('controllers/ControllerAcceuil.php');
+                require_once('controllers/ControllerAccueil.php');
+                $this->_ctrl = new ControllerAccueil($url);
             }
         }
 
         //Gestion des erreurs
         catch(Exception $e){
             $errorMsg = $e->getMessage();
-            require_once('view/viewAcceuil.php');
+            require_once('view/viewAccueil.php');
 
         }
     }
